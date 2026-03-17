@@ -680,7 +680,7 @@ async def add_tournament(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"<b>👥 Команды:</b> <code>{match_info['team1']}</code> vs <code>{match_info['team2']}</code>\n"
         f"<b>🔢 Количество:</b> <code>{match_info['count']}</code>\n"
         f"<b>🏆 Условие:</b> <code>{match_info['win_condition']}</code>\n\n"
-        f"<b>👑 Кэпы:</b>\n{captains_text}\n\n"
+        f"<b>👑 Кэпы:</b>{captains_text}\n\n"
         f"<b>📍 Уведомления будут в:</b> {chat_info}"
     )
     
