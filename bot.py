@@ -14,7 +14,6 @@ import logging
 import os
 import threading
 
-# Получаем токен из переменных окружения
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
 if not BOT_TOKEN:
