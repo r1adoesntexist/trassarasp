@@ -672,14 +672,14 @@ async def add_tournament(update: Update, context: ContextTypes.DEFAULT_TYPE):
         captains_text = "  <i>не указаны</i>"
     
     response = (
-        f"{'📊 <b>Информация взята из опроса</b>\n\n' if from_poll else ''}"
-        f"✅ <b>Турнир добавлен в расписание!</b>\n\n"
-        f"<b>📅 Дата и время:</b> <code>{match_time_str}</code> (МСК)\n"
-        f"<b>🎮 Тип игры:</b> <code>{game_name}</code>\n"
-        f"<b>👥 Команды:</b> <code>{match_info['team1']}</code> vs <code>{match_info['team2']}</code>\n"
-        f"<b>🔢 Количество:</b> <code>{match_info['count']}</code>\n"
-        f"<b>🏆 Условие:</b> <code>{match_info['win_condition']}</code>\n\n"
-        f"<b>👑 Кэпы:</b>\n{captains_text}\n\n"
+        f"{'📊 <b>Информация взята из опроса</b>' if from_poll else ''}"
+        f"✅ <b>Турнир добавлен в расписание!</b>"
+        f"<b>📅 Дата и время:</b> <code>{match_time_str}</code> (МСК)"
+        f"<b>🎮 Тип игры:</b> <code>{game_name}</code>"
+        f"<b>👥 Команды:</b> <code>{match_info['team1']}</code> vs <code>{match_info['team2']}</code>"
+        f"<b>🔢 Количество:</b> <code>{match_info['count']}</code>"
+        f"<b>🏆 Условие:</b> <code>{match_info['win_condition']}</code>"
+        f"<b>👑 Кэпы:</b> {captains_text}"
         f"<b>📍 Уведомления будут в:</b> {chat_info}"
     )
     
