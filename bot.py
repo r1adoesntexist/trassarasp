@@ -14,7 +14,6 @@ import logging
 import os
 import threading
 
-# Получаем токен из переменных окружения
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
 if not BOT_TOKEN:
@@ -141,7 +140,6 @@ def universal_normalize(text: str) -> str:
     
     text = str(text)
     
-    # Сначала преобразуем нестандартные шрифты
     text = normalize_fancy_font(text)
     
     text = text.replace('×', 'x').replace('||', '|').replace('| |', '|')
@@ -572,7 +570,6 @@ def parse_match(text: str) -> Optional[Dict]:
         return None
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Обработчик команды /start"""
     help_text = (
         "🤖 <b>Бот для расписания турниров по мафии</b>\n\n"
         "<b>Команды:</b>\n"
@@ -673,7 +670,7 @@ async def add_tournament(update: Update, context: ContextTypes.DEFAULT_TYPE):
         captains_text = "  <i>не указаны</i>"
     
     response = (
-        f"{'📊 <b>Информация взята из опроса</b>' if from_poll else ''}\n"
+        f"{'📊 <b>Информация взята из опроса</b>\n\n' if from_poll else ''}"
         f"✅ <b>Турнир добавлен в расписание!</b>\n\n"
         f"<b>📅 Дата и время:</b> <code>{match_time_str}</code> (МСК)\n"
         f"<b>🎮 Тип игры:</b> <code>{game_name}</code>\n"
@@ -761,7 +758,6 @@ async def list_tournaments(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(response, parse_mode='HTML')
 
 async def delete_tournament(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Удалить турнир"""
     if not context.args or not context.args[0].isdigit():
         await update.message.reply_text(
             "❌ <b>Укажите номер турнира!</b>\nИспользуйте: <code>/delete 1</code>",
@@ -843,7 +839,6 @@ async def edit_tournament(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 async def show_edit_menu(update: Update, context: ContextTypes.DEFAULT_TYPE, match_index: int):
-    """Показать меню редактирования турнира"""
     match = data.schedule[match_index]
     match_time = datetime.fromisoformat(match['datetime']).strftime('%d.%m %H:%M')
     game_name = GAME_DISPLAY.get(match['game_type'], match['game_type'])
@@ -936,17 +931,23 @@ async def handle_text_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.user_data.get('awaiting_input'):
         return
     
-    if update.message.text == '/cancel':
-        context.user_data.clear()
-        await update.message.reply_text("❌ Редактирование отменено.")
-        return
+    if update.message.text and update.message.text.startswith('/'):
+        if update.message.text == '/cancel':
+            context.user_data.clear()
+            await update.message.reply_text("❌ Редактирование отменено.")
+            return
+        else:
+            await update.message.reply_text(
+                "⚠️ Сначала завершите редактирование командой /cancel или отправьте новое значение."
+            )
+            return
     
     match_index = context.user_data.get('editing_match')
     field = context.user_data.get('editing_field')
     
     if match_index is None or field is None or match_index >= len(data.schedule):
         context.user_data.clear()
-        await update.message.reply_text("❌ Ошибка: турнир не найден.")
+        await update.message.reply_text("❌ Ошибка: турнир не найден. Редактирование отменено.")
         return
     
     new_value = update.message.text.strip()
