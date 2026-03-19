@@ -670,7 +670,7 @@ async def add_tournament(update: Update, context: ContextTypes.DEFAULT_TYPE):
         captains_text = "  <i>не указаны</i>"
     
     response = (
-        f"{'📊 <b>Информация взята из опроса</b>\n\n' if from_poll else ''}"
+        f"{'📊 <b>Информация взята из опроса</b>' if from_poll else ''}"
         f"✅ <b>Турнир добавлен в расписание!</b>\n\n"
         f"<b>📅 Дата и время:</b> <code>{match_time_str}</code> (МСК)\n"
         f"<b>🎮 Тип игры:</b> <code>{game_name}</code>\n"
