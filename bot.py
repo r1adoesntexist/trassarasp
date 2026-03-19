@@ -588,6 +588,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await start(update, context)
 
+async def cancel_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Обработчик команды /cancel"""
+    if context.user_data.get('awaiting_input'):
+        context.user_data.clear()
+        await update.message.reply_text("❌ Редактирование отменено.")
+    else:
+        await update.message.reply_text("❌ Нет активного редактирования.")
+
 async def add_tournament(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply = update.message.reply_to_message
     if not reply:
@@ -931,17 +939,6 @@ async def handle_text_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.user_data.get('awaiting_input'):
         return
     
-    if update.message.text and update.message.text.startswith('/'):
-        if update.message.text == '/cancel':
-            context.user_data.clear()
-            await update.message.reply_text("❌ Редактирование отменено.")
-            return
-        else:
-            await update.message.reply_text(
-                "⚠️ Сначала завершите редактирование командой /cancel или отправьте новое значение."
-            )
-            return
-    
     match_index = context.user_data.get('editing_match')
     field = context.user_data.get('editing_field')
     
@@ -1202,6 +1199,7 @@ def main():
     
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help_command))
+    app.add_handler(CommandHandler("cancel", cancel_command))
     app.add_handler(CommandHandler("add", add_tournament))
     app.add_handler(CommandHandler("list", list_tournaments))
     app.add_handler(CommandHandler("delete", delete_tournament))
